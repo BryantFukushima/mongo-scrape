@@ -12,6 +12,10 @@ body {
   border-radius: 10px;
 }
 
+/* .comment > p {
+  font-size: 1.1rem;
+} */
+
 .red-x {
   position: absolute;
   top: 50%;
@@ -19,4 +23,8 @@ body {
   transform: translateY(-50%);
   background: none;
   border: none;
+}
+
+.red-x:focus {
+  outline: none;
 }

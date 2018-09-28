@@ -71,9 +71,7 @@ app.get("/scrape" , (req , res) => {
           link: link
         }, (err , inserted) => {
           if(inserted) {
-            // TODO: display outcome of scrape. how many new articles added vs no new articles
             console.log("New Article");
-            test++;
           } else if(err.code == 11000) {
             console.log("Already Exists");
           } else {
@@ -82,7 +80,7 @@ app.get("/scrape" , (req , res) => {
         });
       }
     });
-    // TODO: reroute scrape to homepage
+    // TODO: display outcome of scrape. how many new articles added vs no new articles
     res.redirect("/");
   });
 });
@@ -98,6 +96,14 @@ app.post("/add-comment" , (req , res) => {
       res.redirect("/");
     }
   });
+});
+
+app.post("/delete-comment" , (req , res) => {
+  db.comments.remove({
+     "_id" : db.ObjectId(req.body.comment_id)
+   });
+   res.redirect("/");
+  console.log(req.body.comment_id)
 });
 
 
