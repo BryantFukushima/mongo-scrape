@@ -37,7 +37,10 @@ app.get("/" , (req , res) => {
     if(err) {
       console.log(err);
     } else {
-      res.json(found);
+      let articles = {
+        found: found
+      };
+      res.render("./pages" , articles);
     }
   });
   // res.render("pages/");
@@ -45,9 +48,8 @@ app.get("/" , (req , res) => {
 
 app.get("/scrape" , (req , res) => {
   request("https://www.surfer.com/features/", (error , response , html) => {
-    let results = [];
-    const $ = cheerio.load(html);
 
+    const $ = cheerio.load(html);
     $(".entry-container").each((i , element) => {
       // console.log($(element).children(".entry-header").children().children().text());
       let title = $(element).children(".entry-header").children().children().text();
@@ -58,18 +60,17 @@ app.get("/scrape" , (req , res) => {
 
 
       if(title && excerpt && link) {
-        db.article.createIndex({"title": title} , { unique:true });
+        db.article.createIndex({"title": 1} , { unique:true });
         db.article.insert({
           title: title,
           excerpt: excerpt + "...",
           link: link
         }, (err , inserted) => {
           if(inserted) {
-            // TODO: global var to count amount of new articles
-            // NOTE: outside loop call if "var" is 0 then no new articles, else added "x" amount of articles
-            console.log("Scrape Successful")
+            // TODO: display outcome of scrape. how many new articles added vs no new articles
+            console.log("New Article");
           } else if(err.code == 11000) {
-            console.log("No new articles");
+            console.log("Already Exists");
           } else {
             console.log(err);
           }
@@ -77,7 +78,7 @@ app.get("/scrape" , (req , res) => {
       }
     });
     // TODO: reroute scrape to homepage
-    res.json(results);
+    res.redirect("/");
   });
 });
 

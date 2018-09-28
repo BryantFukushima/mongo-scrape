@@ -8,12 +8,22 @@
   </head>
   <body>
 
-    <nav>
+    <% include ../partials/nav %>
+
+    <!-- <nav>
       <ul>
         <li><a href="/">HOME</a></li>
         <li><a href="/scrape">SCRAPE</a></li>
       </ul>
-    </nav>
+    </nav> -->
+
+    <% for (var i in found) { %>
+      <div class="articles m-5">
+        <h2> <%=found[i].title %> </h2>
+        <p> <%=found[i].excerpt %> </p>
+        <a href=<%= found[i].link %> target="_blank" >Check out full article.</a>
+      </div>
+    <% } %>
 
     <!-- footer.ejs -->
     <% include ../partials/footer %>
