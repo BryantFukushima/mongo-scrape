@@ -36,19 +36,23 @@ app.get("/" , (req , res) => {
   db.article.find({} , (err , found) => {
     if(err) {
       console.log(err);
-    } else {
-      let articles = {
-        found: found
-      };
-      res.render("./pages" , articles);
     }
+    db.comments.find({} , (err , found_comments) => {
+      if(err) {
+        console.log(err);
+      } else {
+        let allResults = {
+          found: found,
+          found_comments: found_comments
+        }
+        res.render("./pages" , allResults);
+      }
+    });
   });
-  // res.render("pages/");
 });
 
 app.get("/scrape" , (req , res) => {
   request("https://www.surfer.com/features/", (error , response , html) => {
-
     const $ = cheerio.load(html);
     $(".entry-container").each((i , element) => {
       // console.log($(element).children(".entry-header").children().children().text());
@@ -69,6 +73,7 @@ app.get("/scrape" , (req , res) => {
           if(inserted) {
             // TODO: display outcome of scrape. how many new articles added vs no new articles
             console.log("New Article");
+            test++;
           } else if(err.code == 11000) {
             console.log("Already Exists");
           } else {
@@ -79,6 +84,19 @@ app.get("/scrape" , (req , res) => {
     });
     // TODO: reroute scrape to homepage
     res.redirect("/");
+  });
+});
+
+app.post("/add-comment" , (req , res) => {
+  db.comments.insert({
+    article_id: req.body.article_id,
+    comment: req.body.comment
+  } , (err , inserted) => {
+    if(err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
   });
 });
 

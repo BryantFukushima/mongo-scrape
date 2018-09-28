@@ -1,0 +1,22 @@
+body {
+  background-color: #dedede;
+  color: #343a40;
+}
+
+.articles {
+  border-bottom: 2px rgba(52, 58, 64, .7) solid;
+}
+
+.comment {
+  background-color: #d2d2d2;
+  border-radius: 10px;
+}
+
+.red-x {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+}

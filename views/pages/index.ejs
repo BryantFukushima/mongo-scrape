@@ -1,31 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
 
-    <!-- head.ejs -->
-    <% include ../partials/head %>
+<head>
 
-  </head>
-  <body>
+  <!-- head.ejs -->
+  <% include ../partials/head %>
 
-    <% include ../partials/nav %>
+</head>
 
-    <!-- <nav>
-      <ul>
-        <li><a href="/">HOME</a></li>
-        <li><a href="/scrape">SCRAPE</a></li>
-      </ul>
-    </nav> -->
+<body>
 
-    <% for (var i in found) { %>
-      <div class="articles m-5">
-        <h2> <%=found[i].title %> </h2>
-        <p> <%=found[i].excerpt %> </p>
-        <a href=<%= found[i].link %> target="_blank" >Check out full article.</a>
-      </div>
-    <% } %>
+  <% include ../partials/nav %>
 
-    <!-- footer.ejs -->
-    <% include ../partials/footer %>
-  </body>
+  <div class="jumbotron text-center">
+    <h1 class="display-4">Surf Scraper</h1>
+    <p class="lead">Headline articles from surfer.com</p>
+    <hr class="my-4">
+    <p>Scrape to add new articles. Feel free to leave a comment on your favorite articles!</p>
+    <a class="btn btn-info btn-lg" href="/scrape" role="button">Surf Scrape!</a>
+  </div>
+
+  <% for (var i in found) { %>
+  <div class="articles p-5">
+    <h2> <%=found[i].title %> </h2>
+    <p>
+      <%=found[i].excerpt %>
+    </p>
+    <a href=<%= found[i].link %> target="_blank" >Check out full article.</a>
+    <div class="comments mt-3 pt-4 pl-4 pr-4 pb-0">
+      <h4>Comments:</h4>
+      <% for (var j in found_comments) { %>
+        <% if(found_comments[j].article_id == found[i]._id) { %>
+          <div class="comment row justify-content-between mt-2 mb-2">
+            <p class="p-3 col-4">
+              <%= found_comments[j].comment %>
+            </p>
+            <form class="col-4" method="POST" action="/delete-comment">
+              <input type="hidden" name="comment_id" value="<%= found_comments[i]._id %>">
+              <button class="red-x" type="submit">&#10060;</button>
+            </form>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+    <div>
+      <form method="POST" action="/add-comment">
+        <input type="hidden" name="article_id" value="<%= found[i]._id %>">
+        <textarea class="form-control" type="text" name="comment" placeholder="Leave a comment..."></textarea>
+        <button class="btn btn-info mt-3" type="submit">Comment</button>
+      </form>
+    </div>
+  </div>
+  <% } %>
+
+  <!-- footer.ejs -->
+  <% include ../partials/footer %>
+  <script type="text/javascript">
+    $(".form-control").on("click" , function() {
+      $(this).css("height" , "7rem");
+    });
+    // $(document).on('click', function() {
+    //   if( this.class == "form-control" ) {
+    //     // $(".form-control").css("height" , "7rem");
+    //     alert()
+    //   } else {
+    //     $(".form-control").css("height" , "4rem");
+    //   }
+    // });
+
+  </script>
+</body>
+
 </html>
