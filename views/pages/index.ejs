@@ -18,7 +18,13 @@
     <hr class="my-4">
     <p>Scrape to add new articles. Feel free to leave a comment on your favorite articles!</p>
     <a class="btn btn-info btn-lg" href="/scrape" role="button">Surf Scrape!</a>
+    <% if(count == 0) { %>
+      <p class="text-center mt-3">Found 0 New Articles</p>
+      <% } else { %>
+        <p class="text-center mt-3">Found <%= count %> New Articles</p>
+        <% } %>
   </div>
+
 
   <% if(found.length > 0) { %>
     <% for (var i in found) { %>
